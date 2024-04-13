@@ -35,14 +35,14 @@ public class Runner {
                         System.out.println("First name: "); tFirstname = sc.next();
                         System.out.println("Last name: "); tLastname = sc.next();
                         System.out.println("ID [custom, from 10 to 99]: "); tID = sc.next();
-                        loginTeacher();
+                        loginTeacher(tFirstname, tLastname, tID);
                         firstRUN = false;
                     } else {
                         System.out.println("Enter your information!");
                         System.out.println("First name: "); tFirstname = sc.next();
                         System.out.println("Last name: "); tLastname = sc.next();
                         System.out.println("ID: "); tID = sc.next();
-                        loginTeacher();
+                        loginTeacher(tFirstname, tLastname, tID);
                     }
                     startBool = false;
                     break;
@@ -53,14 +53,14 @@ public class Runner {
                         System.out.println("First name: "); sFirstname = sc.next();
                         System.out.println("Last name: "); sLastname = sc.next();
                         System.out.println("ID [custom, from 10 to 99]: "); sID = sc.next();
-                        loginTeacher();
+                        loginStudent(sFirstname, sLastname, sID);
                         firstRUN = false;
                     } else {
                         System.out.println("Enter your information!");
                         System.out.println("First name: "); sFirstname = sc.next();
                         System.out.println("Last name: "); sLastname = sc.next();
                         System.out.println("ID: "); sID = sc.next();
-                        loginTeacher();
+                        loginStudent(sFirstname, sLastname, sID);
                     }
                     startBool = false;
                     break;
