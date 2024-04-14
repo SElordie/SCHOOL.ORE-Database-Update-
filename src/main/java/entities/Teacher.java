@@ -8,7 +8,7 @@ import java.util.List;
 public class Teacher {
 
     public static boolean tmch;
-    public String firstName, lastName, T_ID;
+    public static String firstName, lastName, T_ID;
     public static List<ArrayList<String>> teachers = new ArrayList<>();
 
     public Teacher() {

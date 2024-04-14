@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import static entities.Student.*;
 import static entities.Teacher.*;
+import static service.Student_Service.menuStudent;
+import static service.Teacher_Service.menuTeacher;
 
 public class Runner {
 
@@ -21,7 +23,7 @@ public class Runner {
 
         do {
             if (!startBool) {
-                startBool = false;
+//                startBool = false;
                 System.out.println("~~~~~ Welcome to the SCHOOL.ORE application! ~~~~~");
                 System.out.println("  ----- Please choose your identity! -----");
                 System.out.println("T (teacher) ||| S (student)");
@@ -37,10 +39,12 @@ public class Runner {
                         System.out.println("Please enter the necessary data to make a registration!");
                         System.out.println("First name: "); tFirstname = sc.next();
                         System.out.println("Last name: "); tLastname = sc.next();
-                        System.out.println("ID [custom, from 10 to 99]: "); tID = sc.next();
+                        System.out.println("ID [custom, from 11 to 99]: "); tID = sc.next();
 
                         registerTeacher(tFirstname, tLastname, tID);
-                        firstRUN = false;
+                        firstRUN = false; System.out.println("");
+
+                        menuTeacher(firstName, lastName, T_ID);
                     } else {
                         do {
                             System.out.println("Enter your information!");
@@ -49,6 +53,13 @@ public class Runner {
                             System.out.println("ID: "); tID = sc.next();
 
                             loginTeacher(tFirstname, tLastname, tID);
+
+                            if (!tmch) {
+                                System.out.println("");
+                            } else {
+                                System.out.println("");
+                                menuTeacher(firstName, lastName, T_ID);
+                            }
                         } while (!tmch);
                     }
                     startBool = false;
@@ -59,10 +70,12 @@ public class Runner {
                         System.out.println("Please enter the necessary data to make a registration!");
                         System.out.println("First name: "); sFirstname = sc.next();
                         System.out.println("Last name: "); sLastname = sc.next();
-                        System.out.println("ID [custom, from 10 to 99]: "); sID = sc.next();
+                        System.out.println("ID [custom, from 100 to 200]: "); sID = sc.next();
 
                         registerStudent(sFirstname, sLastname, sID);
-                        firstRUN = false;
+                        firstRUN = false; System.out.println("");
+
+                        menuStudent(sFirstName, sLastName, S_ID);
                     } else {
                         do {
                             System.out.println("Enter your information!");
@@ -74,6 +87,13 @@ public class Runner {
                             sID = sc.next();
 
                             loginStudent(sFirstname, sLastname, sID);
+
+                            if (!smch) {
+                                System.out.println("");
+                            } else {
+                                System.out.println("");
+                                menuStudent(sFirstName, sLastName, S_ID);
+                            }
                         } while (!smch);
                     }
                     startBool = false;

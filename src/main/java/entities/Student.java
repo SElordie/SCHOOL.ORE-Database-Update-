@@ -8,19 +8,19 @@ import java.util.List;
 public class Student {
 
     public static boolean smch;
-    public String firstName, lastName, S_ID;
+    public static String sFirstName, sLastName, S_ID;
     public static List<ArrayList<String>> students = new ArrayList<>();
 
     public Student() {
-        this.firstName = Runner.sFirstname;
-        this.lastName = Runner.sLastname;
+        this.sFirstName = Runner.sFirstname;
+        this.sLastName = Runner.sLastname;
         this.S_ID = Runner.sID;
     }
 
-    public static void registerStudent(String firstName, String lastName, String S_ID) {
+    public static void registerStudent(String sFirstName, String sLastName, String S_ID) {
         ArrayList<String> student = new ArrayList<>();
-        student.add(firstName);
-        student.add(lastName);
+        student.add(sFirstName);
+        student.add(sLastName);
         student.add(S_ID);
 
         students.add(student);
@@ -28,10 +28,10 @@ public class Student {
         System.out.println(student);
     }
 
-    public static void loginStudent(String firstName, String lastName, String S_ID) {
+    public static void loginStudent(String sFirstName, String sLastName, String S_ID) {
         smch = false;
         for (ArrayList<String> s : students) {
-            if (s.get(0).equals(firstName) && s.get(1).equals(lastName) && s.get(2).equals(S_ID)) {
+            if (s.get(0).equals(sFirstName) && s.get(1).equals(sLastName) && s.get(2).equals(S_ID)) {
                 smch = true;
             } else {
                 smch = false;
