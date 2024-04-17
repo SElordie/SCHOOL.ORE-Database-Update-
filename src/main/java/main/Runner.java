@@ -2,8 +2,10 @@ package main;
 
 import java.util.Scanner;
 
+import static entities.Admin.*;
 import static entities.Student.*;
 import static entities.Teacher.*;
+import static service.Admin_Service.menuAdmin;
 import static service.Student_Service.menuStudent;
 import static service.Teacher_Service.menuTeacher;
 
@@ -11,6 +13,7 @@ public class Runner {
 
     public static boolean firstRUN = true;
     public static String tFirstname, tLastname, tID, sFirstname, sLastname, sID;
+    public static String aFirstname, aLastname, aID;
 
     public static void main(String[] args) {
         startApp();
@@ -26,10 +29,10 @@ public class Runner {
             if (!startBool) {
                 System.out.println("~~~~~ Welcome to the SCHOOL.ORE application! ~~~~~");
                 System.out.println("  ----- Please choose your identity! -----");
-                System.out.println("T (teacher) ||| S (student)");
+                System.out.println("T (teacher) ||| S (student) ||| A (admin)");
                 identityChoice = sc.next();
             } else if (startBool) {
-                System.out.println("T (teacher) ||| S (student)");
+                System.out.println("T (teacher) ||| S (student) ||| A (admin)");
                 identityChoice = sc.next();
             }
 
@@ -112,6 +115,45 @@ public class Runner {
                     }
                     startBool = false;
                     break;
+
+                case "A", "a":
+                    if (firstRUN) {
+                        do {
+                            System.out.println("Please enter the necessary data to make a registration!");
+                            System.out.println("First name: "); aFirstname = sc.next();
+                            System.out.println("Last name: "); aLastname = sc.next();
+                            System.out.println("ID [custom, from 1 to 3]: "); aID = sc.next();
+
+                            int parsedID = Integer.parseInt(aID);
+                            if (parsedID >= 1 && parsedID <= 3) {
+                                idBool = true;
+                                registerAdmin(aFirstname, aLastname, aID);
+                                firstRUN = false; System.out.println("");
+                                menuAdmin(aFirstName, aLastName, A_ID);
+                            } else {
+                                System.err.println("INVALID ID ::: Please try again!");
+                            }
+                        } while (!idBool);
+                    } else {
+                        do {
+                            System.out.println("Enter your information!");
+                            System.out.println("First name: ");
+                            aFirstname = sc.next();
+                            System.out.println("Last name: ");
+                            aLastname = sc.next();
+                            System.out.println("ID: ");
+                            aID = sc.next();
+
+                            loginAdmin(aFirstname, aLastname, aID);
+
+                            if (!amch) {
+                                System.out.println("");
+                            } else {
+                                System.out.println("");
+                                menuAdmin(aFirstName, aLastName, A_ID);
+                            }
+                        } while (!amch);
+                    }
 
                 default:
                     System.err.println("INVALID DATA ::: Please try again!");
