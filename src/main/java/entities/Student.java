@@ -4,6 +4,7 @@ import main.Runner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Student {
 
@@ -43,6 +44,46 @@ public class Student {
         } else {
             System.err.println("ERROR! Login failed, please try again!");
         }
+    }
+
+    public static void removeStudent() {
+        Scanner sc = new Scanner(System.in);
+        int sNR, confRemove; boolean removeBool;
+
+        do {
+            removeBool = false;
+            System.out.println("You are about to permanently REMOVE a student!");
+            System.out.println("Would you like to proceed?\n1 - CONTINUE\n0 - CANCEL");
+            confRemove = sc.nextInt();
+
+            if (confRemove == 1) {
+                if (students.isEmpty()) {
+                    System.err.println("ERROR ::: There aren't any students registered!");
+                } else {
+                    System.out.println("LIST of registered Students:");
+                    for (int i = 0; i < students.size(); i++) {
+                        System.out.println("S-NR: " + i + ", " + students.get(i));
+                    }
+
+                    System.out.print("Enter the S-NR of the student you wish to remove: ");
+                    sNR = sc.nextInt();
+
+                    if (sNR < 0 || sNR >= students.size()) {
+                        System.err.println("INVALID S-NR ::: Please try again!");
+                        removeBool = true;
+                    } else {
+                        students.remove(sNR);
+                        System.out.println("Student by the S-NR: " + sNR + " has been removed!");
+                    }
+                }
+            } else if (confRemove == 0) {
+                System.err.println("Process CANCELLED!");
+                break;
+            } else {
+                System.err.println("INVALID DATA ::: Please try again!");
+                removeBool = true;
+            }
+        } while (removeBool);
     }
 
 }

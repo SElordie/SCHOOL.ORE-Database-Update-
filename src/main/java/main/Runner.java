@@ -19,11 +19,11 @@ public class Runner {
     public static void startApp() {
         Scanner sc = new Scanner(System.in);
         String identityChoice = null;
-        boolean startBool = false;
+        boolean startBool = false, idBool;
 
         do {
+            idBool = false;
             if (!startBool) {
-//                startBool = false;
                 System.out.println("~~~~~ Welcome to the SCHOOL.ORE application! ~~~~~");
                 System.out.println("  ----- Please choose your identity! -----");
                 System.out.println("T (teacher) ||| S (student)");
@@ -36,15 +36,22 @@ public class Runner {
             switch (identityChoice) {
                 case "T", "t":
                     if (firstRUN) {
-                        System.out.println("Please enter the necessary data to make a registration!");
-                        System.out.println("First name: "); tFirstname = sc.next();
-                        System.out.println("Last name: "); tLastname = sc.next();
-                        System.out.println("ID [custom, from 11 to 99]: "); tID = sc.next();
+                        do {
+                            System.out.println("Please enter the necessary data to make a registration!");
+                            System.out.println("First name: "); tFirstname = sc.next();
+                            System.out.println("Last name: "); tLastname = sc.next();
+                            System.out.println("ID [custom, from 11 to 99]: "); tID = sc.next();
 
-                        registerTeacher(tFirstname, tLastname, tID);
-                        firstRUN = false; System.out.println("");
-
-                        menuTeacher(firstName, lastName, T_ID);
+                            int parsedID = Integer.parseInt(tID);
+                            if (parsedID >= 11 && parsedID <= 99) {
+                                idBool = true;
+                                registerTeacher(tFirstname, tLastname, tID);
+                                firstRUN = false; System.out.println("");
+                                menuTeacher(firstName, lastName, T_ID);
+                            } else {
+                                System.err.println("INVALID ID ::: Please try again!");
+                            }
+                        } while (!idBool);
                     } else {
                         do {
                             System.out.println("Enter your information!");
@@ -67,15 +74,22 @@ public class Runner {
 
                 case "S", "s":
                     if (firstRUN) {
-                        System.out.println("Please enter the necessary data to make a registration!");
-                        System.out.println("First name: "); sFirstname = sc.next();
-                        System.out.println("Last name: "); sLastname = sc.next();
-                        System.out.println("ID [custom, from 100 to 200]: "); sID = sc.next();
+                        do {
+                            System.out.println("Please enter the necessary data to make a registration!");
+                            System.out.println("First name: "); sFirstname = sc.next();
+                            System.out.println("Last name: "); sLastname = sc.next();
+                            System.out.println("ID [custom, from 100 to 200]: "); sID = sc.next();
 
-                        registerStudent(sFirstname, sLastname, sID);
-                        firstRUN = false; System.out.println("");
-
-                        menuStudent(sFirstName, sLastName, S_ID);
+                            int parsedID = Integer.parseInt(sID);
+                            if (parsedID >= 100 && parsedID <= 200) {
+                                idBool = true;
+                                registerStudent(sFirstname, sLastname, sID);
+                                firstRUN = false; System.out.println("");
+                                menuStudent(sFirstName, sLastName, S_ID);
+                            } else {
+                                System.err.println("INVALID ID ::: Please try again!");
+                            }
+                        } while (!idBool);
                     } else {
                         do {
                             System.out.println("Enter your information!");
