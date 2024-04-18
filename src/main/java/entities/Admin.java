@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 public class Admin {
 
+    private static int perkCode = 121983;
+
     public static boolean amch;
     public static String aFirstName, aLastName, A_ID;
     public static List<ArrayList<String>> admins = new ArrayList<>();
@@ -43,6 +45,7 @@ public class Admin {
             System.out.println("Login successful!");
         } else {
             System.err.println("ERROR! Login failed, please try again!");
+            System.err.flush();
         }
     }
 
@@ -59,6 +62,7 @@ public class Admin {
             if (confRemove == 1) {
                 if (admins.isEmpty()) {
                     System.err.println("ERROR ::: There aren't any admins registered!");
+                    System.err.flush();
                 } else {
                     System.out.println("LIST of registered Admins:");
                     for (int i = 0; i < admins.size(); i++) {
@@ -70,6 +74,7 @@ public class Admin {
 
                     if (aNR < 0 || aNR >= admins.size()) {
                         System.err.println("INVALID A-NR ::: Please try again!");
+                        System.err.flush();
                         removeBool = true;
                     } else {
                         admins.remove(aNR);
@@ -78,12 +83,15 @@ public class Admin {
                 }
             } else if (confRemove == 0) {
                 System.err.println("Process CANCELLED!");
+                System.err.flush();
                 break;
             } else {
                 System.err.println("INVALID DATA ::: Please try again!");
+                System.err.flush();
                 removeBool = true;
             }
         } while (removeBool);
     }
+
 
 }

@@ -41,8 +41,10 @@ public class Teacher {
 
         if (tmch) {
             System.out.println("Login successful!");
+            System.err.flush();
         } else {
             System.err.println("ERROR! Login failed, please try again!");
+            System.err.flush();
         }
     }
 
@@ -59,6 +61,7 @@ public class Teacher {
             if (confRemove == 1) {
                 if (teachers.isEmpty()) {
                     System.err.println("ERROR ::: There aren't any teachers registered!");
+                    System.err.flush();
                 } else {
                     System.out.println("LIST of registered Teachers:");
                     for (int i = 0; i < teachers.size(); i++) {
@@ -70,6 +73,7 @@ public class Teacher {
 
                     if (tNR < 0 || tNR >= teachers.size()) {
                         System.err.println("INVALID T-NR ::: Please try again!");
+                        System.err.flush();
                         removeBool = true;
                     } else {
                         teachers.remove(tNR);
@@ -78,9 +82,11 @@ public class Teacher {
                 }
             } else if (confRemove == 0) {
                 System.err.println("Process CANCELLED!");
+                System.err.flush();
                 break;
             } else {
                 System.err.println("INVALID DATA ::: Please try again!");
+                System.err.flush();
                 removeBool = true;
             }
         } while (removeBool);

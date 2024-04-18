@@ -110,4 +110,12 @@ public class Utilz {
         return date;
     }
 
+    public static boolean containsNumber(String input) {
+        return input.matches(".*\\d+.*");
+    }
+
+    public static boolean isNumeric(String input) {
+        return input.matches("\\d+");
+    }
+
 }

@@ -1,6 +1,8 @@
 package service;
 
 import entities.Student;
+import entities.Teacher;
+import service.Teacher_Service;
 
 import java.util.Scanner;
 
@@ -60,7 +62,10 @@ public class Student_Service {
     }
 
     public static void accountInfoS(String accNameS, String accSurnameS, String accSID) {
-        System.out.println("menu_account");
+        System.out.println("Account Information:");
+        System.out.println("Name: " + accNameS);
+        System.out.println("Surname: " + accSurnameS);
+        System.out.println("Student ID: " + accSID);
     }
 
     public static void viewHomework() {
@@ -76,7 +81,27 @@ public class Student_Service {
     }
 
     public static void notifyTeachers() {
-        System.out.println("menu_messageTeachers");
+        Scanner sc = new Scanner(System.in);
+        int teacherIndex;
+
+        System.out.println("List of Teachers:");
+        for (int i = 0; i < Teacher.teachers.size(); i++) {
+            System.out.println(i + ": " + Teacher.teachers.get(i));
+        }
+
+        System.out.println("Choose a teacher by index to send a message:");
+        teacherIndex = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter your message:");
+        String message = sc.nextLine();
+
+        if (teacherIndex >= 0 && teacherIndex < Teacher.teachers.size()) {
+            System.out.println("Message sent to " + Teacher.teachers.get(teacherIndex));
+        } else {
+            System.err.println("ERROR ::: Invalid teacher index!");
+            System.err.flush();
+        }
     }
 
 }

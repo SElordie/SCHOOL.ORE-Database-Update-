@@ -43,6 +43,7 @@ public class Student {
             System.out.println("Login successful!");
         } else {
             System.err.println("ERROR! Login failed, please try again!");
+            System.err.flush();
         }
     }
 
@@ -59,6 +60,7 @@ public class Student {
             if (confRemove == 1) {
                 if (students.isEmpty()) {
                     System.err.println("ERROR ::: There aren't any students registered!");
+                    System.err.flush();
                 } else {
                     System.out.println("LIST of registered Students:");
                     for (int i = 0; i < students.size(); i++) {
@@ -70,6 +72,7 @@ public class Student {
 
                     if (sNR < 0 || sNR >= students.size()) {
                         System.err.println("INVALID S-NR ::: Please try again!");
+                        System.err.flush();
                         removeBool = true;
                     } else {
                         students.remove(sNR);
@@ -78,9 +81,11 @@ public class Student {
                 }
             } else if (confRemove == 0) {
                 System.err.println("Process CANCELLED!");
+                System.err.flush();
                 break;
             } else {
                 System.err.println("INVALID DATA ::: Please try again!");
+                System.err.flush();
                 removeBool = true;
             }
         } while (removeBool);
