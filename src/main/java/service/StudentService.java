@@ -1,20 +1,21 @@
 package service;
 
 import entities.Student;
-import entities.Teacher;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static databank.Databazz.*;
-import static entities.Student.students;
-import static entities.Teacher.teachers;
-import static runner.MainRunner.*;
+import static service.Attendance.dataViewAttendance;
+import static service.Homework.dataViewHomework;
+import static service.Marks.dataViewMarks;
+import static service.Messaging.dataNotifyTeachers;
 import static utilities.Utilz.*;
 
 public class StudentService {
 
+    public static Student student;
     public static AtomicBoolean sBool = new AtomicBoolean();
 
     public static void studentSection(AtomicBoolean closeapp) throws SQLException, ClassNotFoundException {
@@ -82,29 +83,10 @@ public class StudentService {
 
                             int convertedID = Integer.parseInt(ID);
                             if (convertedID >= 100 && convertedID <= 500) {
+                                dataRegisterStudent(firstName, lastName, convertedID);
+                                System.out.println("Registration successful! INFO below:");
 
-                                if (firstrunS) {
-                                    Student student = new Student(firstName, lastName, ID);
-                                    students.add(student);
-                                    ss.remove(Integer.valueOf(convertedID));
-                                    dataRegisterStudent(firstName, lastName, ID);
-
-                                    System.out.println("Registration successful! INFO below:");
-                                    System.out.println(student);
-                                } else {
-                                    if (ss.contains(convertedID)) {
-                                        Student student = new Student(firstName, lastName, ID);
-                                        students.add(student);
-                                        ss.remove(Integer.valueOf(convertedID));
-                                        dataRegisterStudent(firstName, lastName, ID);
-
-                                        System.out.println("Registration successful! INFO below:");
-                                        System.out.println(student);
-                                    } else {
-                                        System.out.println("This ID is not available!");
-                                        reg = true;
-                                    }
-                                }
+                                dataReglookStudent(firstName, lastName, convertedID);
                             } else {
                                 System.out.println("ERROR ::: INVALID DATA - Please try again!");
                                 reg = true;
@@ -137,24 +119,18 @@ public class StudentService {
         String enteredID = sc.next();
 
         dataLoginStudent(enteredID);
-        for (Student student : students) {
-            if (SLOGGED) {
-                System.out.println("Login successful!");
-                accountStudent(student.getFirstName(), student.getLastName(), student.getID());
-                return;
-            }
+        if (SLOGGED) {
+            student = new Student("", "", enteredID);
+            int IDint = Integer.parseInt(enteredID);
+
+            System.out.println("Login successful!");
+            accountStudent(IDint);
+        } else {
+            System.out.println("ERROR: Invalid ID. Please try again.");
         }
-//        for (Student student : students) {
-//            if (enteredID.equals(student.getID())) {
-//                System.out.println("Login successful!");
-//                accountStudent(student.getFirstName(), student.getLastName(), student.getID());
-//                return;
-//            }
-//        }
-        System.out.println("ERROR: Invalid ID. Please try again.");
     }
 
-    private static void accountStudent(String fName, String lName, String id) {
+    private static void accountStudent(int sID) throws SQLException {
         Scanner sc = new Scanner(System.in);
         boolean menuExit = false;
 
@@ -163,7 +139,7 @@ public class StudentService {
             System.out.println("1 - Account information");
             System.out.println("2 - View homework");
             System.out.println("3 - View marks");
-            System.out.println("4 - Set attendance");
+            System.out.println("4 - View attendance");
             System.out.println("5 - Notify teachers");
             System.out.println("0 - EXIT");
 
@@ -172,23 +148,23 @@ public class StudentService {
 
             switch (choice) {
                 case 1:
-                    displayInfoS(fName, lName, id);
+                    dataInfoStudent(sID);
                     break;
 
                 case 2:
-                    Homework.viewHomework(id);
+                    dataViewHomework(sID);
                     break;
 
                 case 3:
-                    Marks.viewMarks();
+                    dataViewMarks(sID);
                     break;
 
                 case 4:
-
+                    dataViewAttendance(sID);
                     break;
 
                 case 5:
-                    Messaging.notifyTeachers();
+                    dataNotifyTeachers(sID);
                     break;
 
                 case 0:
@@ -202,11 +178,31 @@ public class StudentService {
         } while (!menuExit);
     }
 
-    private static void displayInfoS(String name, String surname, String id) {
+    public static void dataInfoStudent(int id) throws SQLException {
+        Connection con = DriverManager
+                .getConnection("jdbc:postgresql://localhost:5432/schoolore", "ipro", "121983");
+        Statement datasat = con.createStatement();
+
+        String query = ("SELECT * FROM students WHERE stdid = " + id);
+        ResultSet rq = datasat.executeQuery(query);
+
         System.out.println("STUDENT - Account Information:");
-        System.out.println("Name: " + name);
-        System.out.println("Surname: " + surname);
-        System.out.println("ID: " + id);
+        while (rq.next()) {
+            String studentName = rq.getString("student_name");
+            String studentSurname = rq.getString("student_surname");
+            String studentID = rq.getString("stdid");
+
+            System.out.println("Name: " + studentName);
+            System.out.println("Surname: " + studentSurname);
+            System.out.println("ID: " + studentID);
+        }
+
+        datasat.close();
+        con.close();
+    }
+
+    public static void dataReglookStudent(String name, String surname, int id) {
+        System.out.println("[name: " + name + " | surname: " + surname + " | ID: " + id + "]");
     }
 
 }

@@ -2,22 +2,21 @@ package service;
 
 import entities.Teacher;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static databank.Databazz.*;
-import static entities.Teacher.teachers;
-import static runner.MainRunner.*;
-import static service.Messaging.message;
+import static service.Attendance.dataSetAttendance;
+import static service.Homework.dataGiveHomework;
+import static service.Marks.dataGiveMarks;
+import static service.Messaging.dataViewInbox;
 import static utilities.Utilz.*;
 
 public class TeacherService {
 
+    public static Teacher teacher;
     public static AtomicBoolean tBool = new AtomicBoolean();
-    private static List<String> messageInbox = new ArrayList<>();
 
     public static void teacherSection(AtomicBoolean closeapp) throws SQLException, ClassNotFoundException {
         Scanner sc = new Scanner(System.in);
@@ -84,28 +83,10 @@ public class TeacherService {
 
                             int convertedID = Integer.parseInt(ID);
                             if (convertedID >= 11 && convertedID <= 99) {
+                                dataRegisterTeacher(firstName, lastName, convertedID);
 
-                                if (firstrunT) {
-                                    Teacher teacher = new Teacher(firstName, lastName, ID);
-                                    teachers.add(teacher);
-                                    tch.remove(Integer.valueOf(convertedID));
-                                    dataRegisterTeacher(firstName, lastName, ID);
-
-                                    System.out.println("Registration successful! INFO below:");
-                                    System.out.println(teacher);
-                                } else {
-                                    if (tch.contains(convertedID)) {
-                                        Teacher teacher = new Teacher(firstName, lastName, ID);
-                                        teachers.add(teacher);
-                                        tch.remove(Integer.valueOf(convertedID));
-
-                                        System.out.println("Registration successful! INFO below:");
-                                        System.out.println(teacher);
-                                    } else {
-                                        System.out.println("This ID is not available!");
-                                        reg = true;
-                                    }
-                                }
+                                System.out.println("Registration successful! INFO below:");
+                                dataReglookTeacher(firstName, lastName, convertedID);
                             } else {
                                 System.out.println("ERROR ::: INVALID DATA - Please try again!");
                                 reg = true;
@@ -138,24 +119,18 @@ public class TeacherService {
         String enteredID = sc.next();
 
         dataLoginTeacher(enteredID);
-        for (Teacher teacher : teachers) {
-            if (TLOGGED) {
-                System.out.println("Login successful!");
-                accountTeacher(teacher.getFirstName(), teacher.getLastName(), teacher.getID());
-                return;
-            }
+        if (TLOGGED) {
+            teacher = new Teacher("", "", enteredID);
+            int IDint = Integer.parseInt(enteredID);
+
+            System.out.println("Login successful!");
+            accountTeacher(IDint);
+        } else {
+            System.out.println("ERROR: Invalid ID. Please try again.");
         }
-//        for (Teacher teacher : teachers) {
-//            if (enteredID.equals(teacher.getID())) {
-//                System.out.println("Login successful!");
-//                accountTeacher(teacher.getFirstName(), teacher.getLastName(), teacher.getID());
-//                return;
-//            }
-//        }
-        System.out.println("ERROR: Invalid ID. Please try again.");
     }
 
-    private static void accountTeacher(String fName, String lName, String id) {
+    private static void accountTeacher(int tID) throws SQLException {
         Scanner sc = new Scanner(System.in);
         boolean menuExit = false;
 
@@ -173,23 +148,23 @@ public class TeacherService {
 
             switch (choice) {
                 case 1:
-                    displayInfoT(fName, lName, id);
+                    dataInfoTeacher(tID);
                     break;
 
                 case 2:
-                    Homework.assignHomework();
+                    dataGiveHomework(tID);
                     break;
 
                 case 3:
-                    Marks.setMarks();
+                    dataGiveMarks(tID);
                     break;
 
                 case 4:
-
+                    dataSetAttendance();
                     break;
 
                 case 5:
-                    viewInbox();
+                    dataViewInbox(tID);
                     break;
 
                 case 0:
@@ -203,23 +178,31 @@ public class TeacherService {
         } while (!menuExit);
     }
 
-    private static void displayInfoT(String name, String surname, String id) {
+    private static void dataInfoTeacher(int id) throws SQLException {
+        Connection con = DriverManager
+                .getConnection("jdbc:postgresql://localhost:5432/schoolore", "ipro", "121983");
+        Statement datasat = con.createStatement();
+
+        String query = ("SELECT * FROM teachers WHERE tchid = " + id);
+        ResultSet rq = datasat.executeQuery(query);
+
         System.out.println("TEACHER - Account Information:");
-        System.out.println("Name: " + name);
-        System.out.println("Surname: " + surname);
-        System.out.println("ID: " + id);
-    }
+        while (rq.next()) {
+            String teacherName = rq.getString("teacher_name");
+            String teacherSurname = rq.getString("teacher_surname");
+            String teacherID = rq.getString("tchid");
 
-    private static void viewInbox() {
-        receiveMessage(message);
-        System.out.println("Messages from students:");
-        for (String message : messageInbox) {
-            System.out.println(message);
+            System.out.println("Name: " + teacherName);
+            System.out.println("Surname: " + teacherSurname);
+            System.out.println("ID: " + teacherID);
         }
+
+        datasat.close();
+        con.close();
     }
 
-    public static void receiveMessage(String msg) {
-        messageInbox.add(msg);
+    private static void dataReglookTeacher(String name, String surname, int id) {
+        System.out.println("[name: " + name + " | surname: " + surname + " | ID: " + id + "]");
     }
 
 }

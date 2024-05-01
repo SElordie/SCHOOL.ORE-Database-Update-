@@ -1,83 +1,104 @@
 package service;
 
-import entities.Student;
-
-import java.util.*;
-
-import static entities.Student.students;
+import java.sql.*;
+import java.util.Scanner;
 
 public class Homework {
 
-    public static Map<String, List<String>> studentHomework = new HashMap<>();
-    private static List<String> homeworkDetails = new ArrayList<>();
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/schoolore";
+    private static final String USER = "ipro";
+    private static final String PASSWORD = "121983";
 
-    public static void assignHomework() {
+    public static void dataGiveHomework(int id) throws SQLException {
+        Connection con = DriverManager
+                .getConnection(DB_URL, USER, PASSWORD);
+        Statement sethmwcon = con.createStatement();
+
         Scanner sc = new Scanner(System.in);
-        boolean cont = true;
+        boolean hmw; String subject, task, duedate; int confhmw, sd;
 
-        while (cont) {
-            System.out.println("****** HOMEWORKS ******");
-            System.out.println("Press 1 to assign homework, 0 to exit.");
-            int choice = sc.nextInt();
+        do {
+            hmw = false;
 
-            switch (choice) {
+            System.out.println("---| CONFIRM |---");
+            System.out.println("Press 1 to continue, 0 to exit");
+            confhmw = sc.nextInt();
+
+            switch (confhmw) {
                 case 1:
-                    System.out.println("List-of-STUDENTS:");
-                    for (Student s : students) {
-                        System.out.println("ID: " + s.getID() + " Full-name: " + s.getFirstName() + " " + s.getLastName());
+                    System.out.println("****** HOMEWORKS ******");
+                    System.out.print("Please enter the student ID: "); sd = sc.nextInt();
+                    sc.nextLine();
+
+                    String query = ("SELECT stdid FROM students WHERE stdid = " + sd);
+                    ResultSet rq = sethmwcon.executeQuery(query);
+
+                    if (rq.next()) {
+                        System.out.print("Please enter the SUBJECT: "); subject = sc.next();
+                        System.out.print("Please enter the DUE DATE: "); duedate = sc.next();
+                        sc.nextLine();
+                        System.out.print("Please enter the TASK: "); task = sc.nextLine();
+
+                        String ins = ("INSERT INTO homeworks (student_id, given_by, subject, due_date, task) VALUES (" + sd + ", " + id + ", '" + subject + "', '" + duedate + "', '" + task + "')");
+                        int updins = sethmwcon.executeUpdate(ins);
+                        System.out.println("Homework given successfully!");
+                    } else {
+                        System.out.println("ERROR ::: No student with this ID!");
+                        hmw = true;
                     }
-
-                    System.out.print("Enter the ID of the student to assign homework: ");
-                    String studentID = sc.next();
-
-                    for (Student s : students) {
-                        if (s.getID().equals(studentID)) {
-                            System.out.println("Student found: " + s.getFirstName() + " " + s.getLastName());
-                            System.out.println("---| HOMEWORK DETAILS |---");
-
-                            System.out.print("Enter the subject: ");
-                            String subject = sc.next();
-                            sc.nextLine();
-
-                            System.out.print("Enter the due date: ");
-                            String dueDate = sc.next();
-                            sc.nextLine();
-
-                            System.out.print("Enter the task: ");
-                            String task = sc.nextLine();
-
-                            homeworkDetails.add(subject);
-                            homeworkDetails.add(dueDate);
-                            homeworkDetails.add(task);
-                            studentHomework.put(studentID, homeworkDetails);
-
-                            System.out.println("Homework assigned successfully!");
-                            break;
-                        } else {
-                            System.out.println("NO STUDENTS FOUND ::: Invalid ID!");
-                        }
-                    }
+                    break;
 
                 case 0:
                     System.out.println("EXIT MADE!");
-                    cont = false;
                     break;
 
                 default:
-                    System.out.println("ERROR: Invalid choice. Please try again!");
+                    System.out.println("ERROR ::: INVALID DATA - Please try again!");
+                    hmw = true;
             }
-        }
+        } while (hmw);
     }
 
-    public static void viewHomework(String stdID) {
-        List<String> hwdetails = studentHomework.get(stdID);
-        if (hwdetails != null) {
-            System.out.println("Homework assignment for Student ID - " + stdID + ":");
-            System.out.println("Subject: " + hwdetails.get(0));
-            System.out.println("Due Date: " + hwdetails.get(1));
-            System.out.println("Task: " + hwdetails.get(2));
+    public static void dataViewHomework(int id) throws SQLException {
+        Connection con = DriverManager
+                .getConnection(DB_URL, USER, PASSWORD);
+        Statement viewhmwcon = con.createStatement();
+
+        String check = ("SELECT given_by FROM homeworks WHERE student_id = " + id);
+        ResultSet givenbycheck = viewhmwcon.executeQuery(check);
+        int given = 0;
+
+        if (givenbycheck.next()) {
+            given = givenbycheck.getInt("given_by");
+        }
+
+        String tchname = "";
+        String tchsurname = "";
+        String backcheck = ("SELECT tchid FROM teachers WHERE tchid = " + given);
+        ResultSet givenBC = viewhmwcon.executeQuery(backcheck);
+
+        if (givenBC.next()) {
+            String gettch = ("SELECT teacher_name, teacher_surname FROM teachers WHERE tchid = " + given);
+            ResultSet GETTCH = viewhmwcon.executeQuery(gettch);
+
+            while (GETTCH.next()) {
+                tchname = GETTCH.getString("teacher_name");
+                tchsurname = GETTCH.getString("teacher_surname");
+            }
+
+            String gotten = ("SELECT subject, due_date, task FROM homeworks WHERE student_id = " + id);
+            ResultSet gottencheck = viewhmwcon.executeQuery(gotten);
+
+            System.out.println("****** HOMEWORK ******");
+            while (gottencheck.next()) {
+                String subject = gottencheck.getString("subject");
+                String duedate = gottencheck.getString("due_date");
+                String task = gottencheck.getString("task");
+
+                System.out.println(subject + "\t\t" + "Given by: " + tchname + " " + tchsurname + "\t\t" + duedate + "\t\t" + task);
+            }
         } else {
-            System.out.println("No homework assignment available for Student ID " + stdID + ".");
+            System.out.println("Homeworks: NONE");
         }
     }
 

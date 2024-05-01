@@ -1,8 +1,5 @@
 package runner;
 
-import databank.Databazz;
-
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -24,14 +21,6 @@ public class MainRunner {
     public static boolean firstrun = true;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        for (int i = 11; i <= 99; i++) {
-            tch.add(i);
-        }
-
-        for (int i = 100; i <= 500; i++) {
-            ss.add(i);
-        }
-
         runBazz();
         System.out.println("****************************************************************");
         runApp();

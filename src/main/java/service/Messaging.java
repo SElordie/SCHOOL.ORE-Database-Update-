@@ -1,55 +1,17 @@
 package service;
 
-import entities.Teacher;
-
-import java.util.Scanner;
-
 public class Messaging {
 
-    public static String message;
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/schoolore";
+    private static final String USER = "ipro";
+    private static final String PASSWORD = "121983";
 
-    public static void notifyTeachers() {
-        Scanner sc = new Scanner(System.in);
-        int teacherIndex; boolean note; int conf;
+    public static void dataNotifyTeachers(int id) {
 
-        do {
-            note = false;
+    }
 
-            System.out.println("---| MESSAGING |---");
-            System.out.println("Press 1 to continue, 0 to exit");
-            conf = sc.nextInt();
+    public static void dataViewInbox(int id) {
 
-            switch (conf) {
-                case 1:
-                    System.out.println("List-of-TEACHERS:");
-                    for (int i = 0; i < Teacher.getTeachers().size(); i++) {
-                        System.out.println(i + ": " + Teacher.getTeachers().get(i));
-                    }
-
-                    System.out.println("Choose a teacher by index to send a message:");
-                    teacherIndex = sc.nextInt();
-                    sc.nextLine();
-
-                    System.out.println("Enter your message:");
-                    message = sc.nextLine();
-
-                    if (teacherIndex >= 0 && teacherIndex < Teacher.getTeachers().size()) {
-                        System.out.println("Message sent to " + Teacher.getTeachers().get(teacherIndex));
-                    } else {
-                        System.out.println("ERROR ::: INVALID DATA - Please try again!");
-                        note = true;
-                    }
-                    break;
-
-                case 0:
-                    System.err.println("EXIT MADE!");
-                    break;
-
-                default:
-                    System.out.println("ERROR ::: INVALID DATA - Please try again!");
-                    note = true;
-            }
-        } while (note);
     }
 
 }

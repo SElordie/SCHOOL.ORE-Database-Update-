@@ -1,21 +1,13 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Teacher {
 
-    public static List<Teacher> teachers = new ArrayList<>();
     private String firstName, lastName, ID;
 
     public Teacher(String firstName, String lastName, String ID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
-    }
-
-    public static List<Teacher> getTeachers() {
-        return teachers;
     }
 
     @Override

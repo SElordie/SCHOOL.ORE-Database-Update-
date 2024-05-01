@@ -10,26 +10,34 @@ public class Databazz {
         Class.forName("org.postgresql.Driver");
         Connection con = DriverManager
                 .getConnection("jdbc:postgresql://localhost:5432/schoolore", "ipro", "121983");
-        Statement connectedMain = con.createStatement();
+        Statement stmain = con.createStatement();
         System.out.println("Connection made!");
 
         // DDL for CREATE/DROP/ALTER
         //---------------------------
         // DQL for Data Manipulation: SELECT
 
-        boolean tableTeacher = connectedMain
-                .execute("CREATE TABLE IF NOT EXISTS teachers(teacher_name VARCHAR(30), teacher_surname VARCHAR(30), tchid INT UNIQUE)");
+        boolean tableTeacher = stmain
+                .execute("CREATE TABLE IF NOT EXISTS teachers (teacher_name VARCHAR(30), teacher_surname VARCHAR(30), tchid INT UNIQUE)");
         System.out.println("Teacher_Table result: " + tableTeacher); // Should give FALSE
 
-        boolean tableStudent = connectedMain
-                .execute("CREATE TABLE IF NOT EXISTS students(student_name VARCHAR(30), student_surname VARCHAR(30), stdid INT UNIQUE)");
+        boolean tableStudent = stmain
+                .execute("CREATE TABLE IF NOT EXISTS students (student_name VARCHAR(30), student_surname VARCHAR(30), stdid INT UNIQUE)");
         System.out.println("Student_Table result: " + tableStudent); // Should give FALSE
 
-        connectedMain.close();
+        boolean tableAttendance = stmain
+                .execute("CREATE TABLE IF NOT EXISTS attendance (student_id INT, date VARCHAR(30), status VARCHAR(30))");
+        System.out.println("Attendance_Table result: " + tableAttendance);
+
+        boolean tableHomework = stmain
+                .execute("CREATE TABLE IF NOT EXISTS homeworks (student_id INT, given_by INT, subject VARCHAR(30), due_date VARCHAR(30), task VARCHAR(70))");
+        System.out.println("Homework_Table result: " + tableHomework);
+
+        stmain.close();
         con.close();
     }
 
-    public static void dataRegisterTeacher(String name, String surname, String id) throws ClassNotFoundException, SQLException {
+    public static void dataRegisterTeacher(String name, String surname, int id) throws ClassNotFoundException, SQLException {
         Connection con = DriverManager
                 .getConnection("jdbc:postgresql://localhost:5432/schoolore", "ipro", "121983");
         Statement regstateT = con.createStatement();
@@ -41,7 +49,7 @@ public class Databazz {
         con.close();
     }
 
-    public static void dataRegisterStudent(String name, String surname, String id) throws ClassNotFoundException, SQLException {
+    public static void dataRegisterStudent(String name, String surname, int id) throws ClassNotFoundException, SQLException {
         Connection con = DriverManager
                 .getConnection("jdbc:postgresql://localhost:5432/schoolore", "ipro", "121983");
         Statement regstateS = con.createStatement();
