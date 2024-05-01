@@ -1,94 +1,50 @@
 package entities;
 
-import main.Runner;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Student {
 
-    public static boolean smch;
-    public static String sFirstName, sLastName, S_ID;
-    public static List<ArrayList<String>> students = new ArrayList<>();
+    public static List<Student> students = new ArrayList<>();
+    private String firstName, lastName, ID;
 
-    public Student() {
-        this.sFirstName = Runner.sFirstname;
-        this.sLastName = Runner.sLastname;
-        this.S_ID = Runner.sID;
+    public Student(String firstName, String lastName, String ID) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ID = ID;
     }
 
-    public static void registerStudent(String sFirstName, String sLastName, String S_ID) {
-        ArrayList<String> student = new ArrayList<>();
-        student.add(sFirstName);
-        student.add(sLastName);
-        student.add(S_ID);
-
-        students.add(student);
-        System.out.println("Registration successful! INFO below:");
-        System.out.println(student);
+    @Override
+    public String toString() {
+        return "STUDENT [" +
+                "name: " + firstName + "," +
+                " surname: " + lastName + "," +
+                " ID: " + ID +
+                ']';
     }
 
-    public static void loginStudent(String sFirstName, String sLastName, String S_ID) {
-        smch = false;
-        for (ArrayList<String> s : students) {
-            if (s.get(0).equals(sFirstName) && s.get(1).equals(sLastName) && s.get(2).equals(S_ID)) {
-                smch = true;
-            } else {
-                smch = false;
-            }
-        }
-
-        if (smch) {
-            System.out.println("Login successful!");
-        } else {
-            System.err.println("ERROR! Login failed, please try again!");
-            System.err.flush();
-        }
+    public String getFirstName() {
+        return firstName;
     }
 
-    public static void removeStudent() {
-        Scanner sc = new Scanner(System.in);
-        int sNR, confRemove; boolean removeBool;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-        do {
-            removeBool = false;
-            System.out.println("You are about to permanently REMOVE a student!");
-            System.out.println("Would you like to proceed?\n1 - CONTINUE\n0 - CANCEL");
-            confRemove = sc.nextInt();
+    public String getLastName() {
+        return lastName;
+    }
 
-            if (confRemove == 1) {
-                if (students.isEmpty()) {
-                    System.err.println("ERROR ::: There aren't any students registered!");
-                    System.err.flush();
-                } else {
-                    System.out.println("LIST of registered Students:");
-                    for (int i = 0; i < students.size(); i++) {
-                        System.out.println("S-NR: " + i + ", " + students.get(i));
-                    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-                    System.out.print("Enter the S-NR of the student you wish to remove: ");
-                    sNR = sc.nextInt();
+    public String getID() {
+        return ID;
+    }
 
-                    if (sNR < 0 || sNR >= students.size()) {
-                        System.err.println("INVALID S-NR ::: Please try again!");
-                        System.err.flush();
-                        removeBool = true;
-                    } else {
-                        students.remove(sNR);
-                        System.out.println("Student by the S-NR: " + sNR + " has been removed!");
-                    }
-                }
-            } else if (confRemove == 0) {
-                System.err.println("Process CANCELLED!");
-                System.err.flush();
-                break;
-            } else {
-                System.err.println("INVALID DATA ::: Please try again!");
-                System.err.flush();
-                removeBool = true;
-            }
-        } while (removeBool);
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
 }

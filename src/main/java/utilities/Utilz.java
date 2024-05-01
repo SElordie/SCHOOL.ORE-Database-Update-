@@ -1,6 +1,7 @@
 package utilities;
 
 import java.util.InputMismatchException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +14,6 @@ public class Utilz {
 
         if (!matcher.matches()){
             try {
-                System.err.println("INVALID DATA");
                 throw new InputMismatchException("First name must be letters only!");
             } catch (InputMismatchException e){
                 return e.getMessage();
@@ -30,7 +30,6 @@ public class Utilz {
 
         if (!matcher.matches()){
             try {
-                System.err.println("INVALID DATA");
                 throw new InputMismatchException("Last name must be letters only!");
             } catch (InputMismatchException e){
                 return e.getMessage();
@@ -116,6 +115,11 @@ public class Utilz {
 
     public static boolean isNumeric(String input) {
         return input.matches("\\d+");
+    }
+
+    public static void invalidChoiceError(AtomicBoolean b) {
+        System.out.println("ERROR ::: Invalid choice, please try again!");
+        b.set(true);
     }
 
 }
