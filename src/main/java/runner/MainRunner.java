@@ -14,7 +14,7 @@ import static service.TeacherService.teacherSection;
 import static utilities.Utilz.invalidChoiceError;
 
 public class MainRunner {
-    // DB
+
     public static ArrayList<Integer> tch = new ArrayList<>();
     public static ArrayList<Integer> ss = new ArrayList<>();
     public static AtomicBoolean mainBool = new AtomicBoolean();
